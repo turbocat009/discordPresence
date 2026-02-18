@@ -1,0 +1,4 @@
+/.vscode
+/bin/debug/
+/bin/release/
+/lib

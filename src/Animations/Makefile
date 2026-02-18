@@ -1,0 +1,1 @@
+g++ animationPlayer.cpp -o animationPlayer -I /opt/homebrew/opt/sdl2/include -L /opt/homebrew/lib  -lSDL2 -lSDL2_image
