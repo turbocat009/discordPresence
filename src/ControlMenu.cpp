@@ -5,9 +5,9 @@ Control::Control(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, RenderWind
     : Entity(p_pos, p_size, p_tex),
       window(win),
       macOSCloseTex(window->loadTexture("res/gfx/mOSX.png")),
-      macOSMinimTex(window->loadTexture("res/gfx/mOS-.png")),
-      mOSClose(Vector2f(pos.x + 10, (pos.y - 36) + 10), Vector2f(16, 16), macOSCloseTex, " ", ' ', true, false, true, window),
-      mOSMinim(Vector2f(pos.x + 32, (pos.y - 36) + 10), Vector2f(16, 16), macOSMinimTex, " ", ' ', true, false, true, window),
+      //macOSMinimTex(window->loadTexture("res/gfx/mOS-.png")),
+      mOSClose(Vector2f(pos.x + 15, (pos.y - 34) + 10), Vector2f(12, 12), macOSCloseTex, " ", window),
+      //mOSMinim(Vector2f(pos.x + 32, (pos.y - 36) + 10), Vector2f(16, 16), macOSMinimTex, " ", ' ', true, false, true, window),
       p_text(text)
 {
     font = window->loadFont("res/fonts/SS3_Regular.ttf", 20);
@@ -15,23 +15,23 @@ Control::Control(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, RenderWind
 
 void Control::HandleEvents(SDL_Event &ev, bool &running) {
     mOSClose.handleEvent(ev);
-    mOSMinim.handleEvent(ev);
+    //mOSMinim.handleEvent(ev);
 
     // Check button presses and consume them immediately so they don't stay true
     if (mOSClose.isPressed()) {
         running = false;
         mOSClose.consumePress();
     }
-    if (mOSMinim.isPressed()) {
+    /*if (mOSMinim.isPressed()) {
         window->setMinimized();
         mOSMinim.consumePress();
-    }
+    }*/
 }
 
 void Control::Update(float deltaTime) {
     Entity::update(deltaTime);
     mOSClose.Update(deltaTime);
-    mOSMinim.Update(deltaTime);
+    //mOSMinim.Update(deltaTime);
     SDL_GetMouseState(&mx, &my);
     mouse = {mx, my};
     moveWindow();
@@ -42,9 +42,9 @@ void Control::Render(SDL_Renderer *renderer, SDL_Window *wind) {
     Entity::render(renderer, wind);
     mOSClose.w = 46;
     mOSClose.render(renderer, wind);
-    mOSMinim.w = 46;
-    mOSMinim.render(renderer, wind);
-    window->renderText(font, p_text, {255, 255, 255, 255}, pos.x + 75, pos.y + 5);
+    /*mOSMinim.w = 46;
+    mOSMinim.render(renderer, wind);*/
+    window->renderText(font, p_text, {255, 255, 255, 255}, pos.x + 50, pos.y + 5);
 }
 
 void Control::checkCollisions(Player &player) {
@@ -58,10 +58,6 @@ void Control::checkCollisions(Player &player) {
 }
 
 void Control::destroyPopUP(SDL_Event &ev) {
-    int mx, my;
-    SDL_GetMouseState(&mx, &my);
-    SDL_Point mouse = {mx, my};
-    bool hovered = mOSClose.isHovered();
     if (isAnimationComplete()) {
         if (mOSClose.isPressed()) {
             currentFrame.x = 0;

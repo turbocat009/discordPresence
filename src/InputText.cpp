@@ -3,8 +3,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-Input::Input(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, std::string p_text, int txtLength, char p_button, bool bW, bool leftIMG, bool isCentered, RenderWindow *win)
-    : Entity(p_pos, p_size, p_tex), window(win), text(p_text), button(p_button), black(bW), left(leftIMG), centered(isCentered), length(txtLength)
+Input::Input(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, std::string p_text, int txtLength, RenderWindow *win)
+    : Entity(p_pos, p_size, p_tex), window(win), text(p_text), length(txtLength)
 {
     m_font = window->loadFont("res/fonts/SS3_Bold.ttf", 32);
 
@@ -33,7 +33,10 @@ void Input::Render(SDL_Renderer *renderer)
     if (!m_font)
         std::cerr << "Font not loaded!" << std::endl;
 
-    
+    TTF_SizeText(m_font, text.c_str(), &textWidth, nullptr);
+    txtX = pos.x + 20;
+    txtY = pos.y + size.y / 2 - 26;
+
     window->renderText(m_font, text, {0, 0, 0, 255}, txtX, txtY);
 }
 
@@ -118,4 +121,8 @@ void Input::write(SDL_Event &ev) {
 
 std::string Input::getText() {
     return text;
+}
+
+void Input::setText(std::string Text) {
+    text = Text;
 }

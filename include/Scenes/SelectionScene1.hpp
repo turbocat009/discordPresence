@@ -4,6 +4,7 @@
 #include "Button.hpp"
 #include "InputText.hpp"
 
+
 #include <string>
 
 
@@ -30,7 +31,7 @@ private:
     SDL_Texture *smallTxt;
     SDL_Texture *bigTxt;
     std::vector<Entity> entities;
-    bool continue_ = false;
+    //bool continue_ = false;
     Button applyBtn;
     Button logOutBtn;
     Input name;
@@ -40,4 +41,8 @@ private:
     std::string Name;
     std::string Desc;
     std::string Type;
+    bool randomVariableToMakeItWork;
+    std::string LocalName;
+    std::string LocalDesc;
+    std::string LocalType;
 };

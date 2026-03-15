@@ -8,14 +8,11 @@ MenuScene::MenuScene(RenderWindow *win, const uint64_t APPLICATION_ID )
       menuImg(window->loadTexture("res/gfx/MainMenu.png")),
       btnTex(window->loadTexture("res/gfx/Button_Orange.png")),
       Menu(Vector2f(window->getWidth() / 2 - 125, window->getHeight() / 2 + 25), Vector2f(512, 512), menuImg),
-      logInBTN(Vector2f(window->getWidth() / 2 - 157, window->getHeight() / 2 + 50), Vector2f(314, 104), btnTex, "Log In With Discord", ' ', true, false, true, window)
+      logInBTN(Vector2f(window->getWidth() / 2 - 157, window->getHeight() / 2 + 50), Vector2f(314, 104), btnTex, "Log In With Discord", window)
 
 {}
 
 void MenuScene::handleEvent(SDL_Event &ev, bool &running) {
-    int mx, my;
-    SDL_GetMouseState(&mx, &my);
-    SDL_Point mouse = {mx, my};
     if (ev.type == SDL_QUIT)
         running = false;
     if (ev.type == SDL_KEYDOWN) {

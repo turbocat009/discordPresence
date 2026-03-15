@@ -3,8 +3,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-Button::Button(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, std::string p_text, char p_button, bool bW, bool leftIMG, bool isCentered, RenderWindow *win)
-    : Entity(p_pos, p_size, p_tex), window(win), text(p_text), button(p_button), black(bW), left(leftIMG), centered(isCentered)
+Button::Button(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, std::string p_text, RenderWindow *win)
+    : Entity(p_pos, p_size, p_tex), window(win), text(p_text)
 {
     m_font = window->loadFont("res/fonts/SS3_Bold.ttf", 32);
 

@@ -42,7 +42,6 @@ SDL_Texture* RenderWindow::loadTexture(const char* p_filePath) {
 }
 
 TTF_Font *RenderWindow::loadFont(const char *p_filePath, int p_size) {
-    int scaledSize = (int)(p_size * dpiScaleY);
     TTF_Font *font = TTF_OpenFont(p_filePath, p_size);
 
     if (!font)

@@ -1,0 +1,164 @@
+#include <vector>
+#include <string>
+#include <stdexcept>
+#include <iostream>
+
+#include <curl/curl.h>
+#include <nlohmann/json.hpp>
+#include <ImageDownloader.hpp>
+#include "DiscordFunc.hpp"
+
+std::string activity_Name;
+std::string activity_Description;
+std::string activity_Type;
+std::string Id;
+
+static size_t writeStringCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+    size_t realSize = size * nmemb;
+    auto *response = static_cast<std::string *>(userp);
+    response->append(static_cast<char *>(contents), realSize);
+    return realSize;
+}
+
+std::string getJson(const std::string &url, const long discordID) {
+    CURL *curl = curl_easy_init();
+    if (!curl)
+        throw std::runtime_error("curl_easy_init failed");
+
+    std::string connectionURL = url + "users?discordID=" + std::to_string(discordID);
+
+    std::string response;
+
+    curl_easy_setopt(curl, CURLOPT_URL, connectionURL.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeStringCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0);
+
+    struct curl_slist *headers = nullptr;
+    headers = curl_slist_append(headers, "Accept: application/json");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+    CURLcode res = curl_easy_perform(curl);
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+
+    if (res != CURLE_OK)
+        throw std::runtime_error(curl_easy_strerror(res));
+
+    if (response == "null") {
+        return createUser(url, discordID);
+    }
+
+    nlohmann::json responseJSON = nlohmann::json::parse(response);
+
+    activity_Name = responseJSON["actName"];
+    activity_Description = responseJSON["actDesc"];
+    activity_Type = responseJSON["actType"];
+    Id = responseJSON["id"];
+
+    return response;
+}
+
+std::string createUser(const std::string &url, const long discordID) {
+    CURL *curl = curl_easy_init();
+    if (!curl)
+        throw std::runtime_error("curl_easy_init failed");
+
+    std::string connectionURL = url + "addUser";
+
+    nlohmann::json newUser;
+    newUser["id"] = std::to_string(discordID);
+    newUser["name"] = "DiscordFunc::getCurrentUsername()";
+    newUser["actname"] = "Activity_Name";
+    newUser["actdesc"] = "Activity_Desc";
+    newUser["acttype"] = "Activity_Type";
+    newUser["actimg"] = "https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-";
+
+    struct curl_slist *headers = nullptr;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    std::string body = newUser.dump(4);
+
+
+    curl_easy_setopt(curl, CURLOPT_URL, connectionURL.c_str());
+    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.size());
+
+    CURLcode res = curl_easy_perform(curl);
+
+    if (res != CURLE_OK) {
+        std::cerr << "curl error: " << curl_easy_strerror(res) << "\n";
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+        curl_global_cleanup();
+        return "Curl Failed";
+    }
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
+
+    return "0";
+}
+
+std::string modifyUser(const std::string &url, const long discordID, std::string &actName, std::string &actDesc, std::string &actType)
+{
+    CURL *curl = curl_easy_init();
+    if (!curl)
+        throw std::runtime_error("curl_easy_init failed");
+
+    std::string connectionURL = url + "modifyUser";
+
+    nlohmann::json user;
+    user["id"] = std::to_string(discordID);
+    user["actname"] = actName;
+    user["actdesc"] = actDesc;
+    user["acttype"] = actType;
+    user["actimg"] = "https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-";
+
+    struct curl_slist *headers = nullptr;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    std::string body = user.dump(4);
+
+    curl_easy_setopt(curl, CURLOPT_URL, connectionURL.c_str());
+    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.size());
+
+    CURLcode res = curl_easy_perform(curl);
+
+    if (res != CURLE_OK) {
+        std::cerr << "curl error: " << curl_easy_strerror(res) << "\n";
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+        curl_global_cleanup();
+        return "Curl Failed";
+    }
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
+
+    return "0";
+}
+
+std::string getActName() {
+    return activity_Name;
+}
+
+std::string getActDesc() {
+    return activity_Description;
+}
+
+std::string getActType() {
+    return activity_Type;
+}
+
+std::string getID() {
+    return Id;
+}

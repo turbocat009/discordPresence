@@ -5,7 +5,7 @@
 
 class Button : public Entity {
     public:
-        Button(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, std::string p_text, char p_button, bool bW, bool leftIMG, bool isCentered, RenderWindow *win);
+        Button(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, std::string p_text, RenderWindow *win);
         void Update(float deltaTime);
         void Render(SDL_Renderer *renderer);
         void checkCollisions(Player &player);
@@ -17,18 +17,15 @@ class Button : public Entity {
         void consumePress() { pressed = false; }  // Reset pressed state after consuming it
         void changeButtonUIState();
         void handleEvent(SDL_Event &ev);
-    private : SDL_Window *wind;
+    private : 
+        SDL_Window *wind;
         RenderWindow *window;
         std::string text;
         TTF_Font *m_font;
-        char button;
-        SDL_Color b_color;
-        bool black;
-        bool left;
-        bool centered;
+        /*SDL_Color b_color;*/
+        SDL_Point mouse;
         int mx;
         int my;
-        SDL_Point mouse;
         bool pressed;
         int txtX;
         int txtY;

@@ -21,7 +21,7 @@
 
 #include "Scenes/Scene.hpp"
 #include "Scenes/MenuScene.hpp"
-#include "Scenes/GameScene.hpp"
+#include "Scenes/LoadingScene.hpp"
 #include "Scenes/SelectionScene1.hpp"
 
 const uint64_t APPLICATION_ID = 1465308629581299856;
@@ -86,12 +86,20 @@ int main(int argc, char *argv[]) {
         if (MenuScene *m = dynamic_cast<MenuScene *>(scene)) {
             if (m->startRequested()) {
                 delete scene;
+                scene = new LoadingScene(&window, defTexture);
+                scene->setFont(font);
+                continue;
+            }
+        }
+        if (LoadingScene *m = dynamic_cast<LoadingScene *>(scene)) {
+            if (m->startRequested()) {
+                delete scene;
                 scene = new SelectionScene1(&window, defTexture);
                 scene->setFont(font);
                 continue;
             }
         }
-        
+
         scene->render();
         controlMenu.Render(window.getRenderer(), window.getWindow());
         

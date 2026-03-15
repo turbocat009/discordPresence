@@ -23,7 +23,7 @@ void DiscordFunc::initDiscordSDK() {
   }, discordpp::LoggingSeverity::Info);
 
   // Set up status callback to monitor client connection
-  client->SetStatusChangedCallback([this](discordpp::Client::Status status, discordpp::Client::Error error, int32_t errorDetail) {
+  client->SetStatusChangedCallback([](discordpp::Client::Status status, discordpp::Client::Error error, int32_t errorDetail) {
       std::cout << "Status changed: " << discordpp::Client::StatusToString(status) << std::endl;
 
       if (status == discordpp::Client::Status::Ready) {
@@ -67,7 +67,7 @@ void DiscordFunc::logIn(uint64_t APPLICATION_ID, discordpp::Client *clientRef) {
         std::string scope) {
           std::cout << "Access token received! Establishing connection...\n";
           // Next Step: Update the token and connect
-          clientRef->UpdateToken(discordpp::AuthorizationTokenType::Bearer, accessToken, [clientRef, accessToken](discordpp::ClientResult result) {
+          clientRef->UpdateToken(discordpp::AuthorizationTokenType::Bearer, accessToken, [accessToken](discordpp::ClientResult result) {
             if(result.Successful()) {
               std::cout << "Token updated, connecting to Discord...\n";
               client->Connect();
@@ -92,12 +92,17 @@ void DiscordFunc::logOut() {
   token = "nullptr";
 }
 
-void DiscordFunc::setPresence(std::string Name, std::string Desc, std::string Type) {
+void DiscordFunc::setPresence(std::string &Name, std::string &Desc, std::string &Type) {
   discordpp::Activity activity;
   activity.SetType(discordpp::ActivityTypes::Playing);
   activity.SetName(Name);
   activity.SetDetails(Desc);
   activity.SetState(Type);
+
+  discordpp::ActivityAssets assets;
+  assets.SetSmallImage("https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-");
+  assets.SetLargeImage("https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-");
+  activity.SetAssets(assets);
 
   client->UpdateRichPresence(activity, [](discordpp::ClientResult result) {});
 }
@@ -108,4 +113,14 @@ std::shared_ptr<discordpp::Client> DiscordFunc::getClient() {
 
 std::string DiscordFunc::getToken() {
   return token;
+}
+
+std::string DiscordFunc::getCurrentUsername() {
+  auto user = client->GetCurrentUser();
+  return user.Username();
+}
+
+long DiscordFunc::getCurrentID() {
+  auto user = client->GetCurrentUser();
+  return user.Id();
 }

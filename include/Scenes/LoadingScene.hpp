@@ -5,18 +5,18 @@
 #include "Object.hpp"
 #include <vector>
 
-class GameScene : public Scene {
+class LoadingScene : public Scene {
     public:
-        GameScene(RenderWindow *win, SDL_Texture *defTex, SDL_Texture *playerTex, SDL_Texture *gunTex);
+        LoadingScene(RenderWindow *win, SDL_Texture *defTex);
         void handleEvent(SDL_Event &ev, bool &running) override;
         void update(float deltaTime) override;
         void render() override;
+        bool startRequested() const { return continue_; }
     private:
         int a;
         RenderWindow *window;
         SDL_Window *wind;
-        Player player;
-        Player player2;
-        Object object;
         std::vector<Entity> tiles;
+        bool continue_ = false;
+        bool fuck = true;
 };
