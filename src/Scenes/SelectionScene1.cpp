@@ -50,7 +50,7 @@ void SelectionScene1::handleEvent(SDL_Event &ev, bool &running) {
         Name = LocalName;
         Desc = LocalDesc;
         Type = LocalType;
-        modifyUser("http://127.0.0.1:3000/", DiscordFunc::getCurrentID(), Name, Desc, Type);
+        modifyUser("https://discord-represence-backend.vercel.app/", DiscordFunc::getCurrentID(), Name, Desc, Type);
     }
 
     applyBtn.handleEvent(ev);
