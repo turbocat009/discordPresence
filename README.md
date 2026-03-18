@@ -13,7 +13,7 @@ An application to be able to modify your Discord Rich Presence live.
   - libcurl
   - libtray
 - Get the source & build it:
-//```bash
+```bash
 git clone https://github.com/turbocat009/discordPresence.git 
 cd discordPresence
 make (to do)
