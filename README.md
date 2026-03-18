@@ -17,6 +17,7 @@ An application to be able to modify your Discord Rich Presence live.
 git clone https://github.com/turbocat009/discordPresence.git 
 cd discordPresence
 make (to do)
+```
 
 
 ## Installing:
