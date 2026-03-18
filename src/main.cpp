@@ -100,6 +100,15 @@ int main(int argc, char *argv[]) {
             }
         }
 
+        if (SelectionScene1 *m = dynamic_cast<SelectionScene1 *>(scene)) {
+            if (m->startRequestedBack())  {
+                delete scene;
+                scene = new MenuScene(&window, APPLICATION_ID);
+                scene->setFont(font);
+                continue;
+            }
+        }
+
         scene->render();
         controlMenu.Render(window.getRenderer(), window.getWindow());
         

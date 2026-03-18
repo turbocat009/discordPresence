@@ -1,4 +1,5 @@
 #include "ControlMenu.hpp"
+#include "DiscordFunc.hpp"
 #include <SDL2/SDL.h>
 
 Control::Control(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, RenderWindow *win, std::string text)
@@ -19,7 +20,11 @@ void Control::HandleEvents(SDL_Event &ev, bool &running) {
 
     // Check button presses and consume them immediately so they don't stay true
     if (mOSClose.isPressed()) {
-        running = false;
+        if (DiscordFunc::getToken() == "nullptr") {
+            running = false;
+        } else {
+            SDL_HideWindow(window->getWindow());
+        }
         mOSClose.consumePress();
     }
     /*if (mOSMinim.isPressed()) {

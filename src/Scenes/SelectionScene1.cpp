@@ -60,7 +60,7 @@ void SelectionScene1::handleEvent(SDL_Event &ev, bool &running) {
     type.handleEvent(ev);
 
     if (DiscordFunc::getToken() == "nullptr") {
-        running = false;
+        logedOut_ = true;
     }
 
 }

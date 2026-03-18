@@ -16,7 +16,7 @@ public:
     void render() override;
     void update(float dt) override;
     bool startRequestedContinue() const { return start_; }
-    bool startRequestedBack() const { return back_; }
+    bool startRequestedBack() const { return logedOut_; }
     SDL_Texture *bg;
 private:
     RenderWindow *window;
@@ -31,7 +31,7 @@ private:
     SDL_Texture *smallTxt;
     SDL_Texture *bigTxt;
     std::vector<Entity> entities;
-    //bool continue_ = false;
+    bool logedOut_ = false;
     Button applyBtn;
     Button logOutBtn;
     Input name;

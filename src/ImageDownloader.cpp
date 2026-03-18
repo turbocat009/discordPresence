@@ -50,12 +50,14 @@ std::string getJson(const std::string &url, const long discordID) {
         return createUser(url, discordID);
     }
 
+
     nlohmann::json responseJSON = nlohmann::json::parse(response);
 
-    activity_Name = responseJSON["actName"];
-    activity_Description = responseJSON["actDesc"];
-    activity_Type = responseJSON["actType"];
-    Id = responseJSON["id"];
+    activity_Name = responseJSON["activity_name"];
+    activity_Description = responseJSON["activity_desc"];
+    activity_Type = responseJSON["activity_type"];
+    Id = std::to_string(responseJSON["id"].get<long long>());
+
 
     return response;
 }
@@ -69,10 +71,10 @@ std::string createUser(const std::string &url, const long discordID) {
 
     nlohmann::json newUser;
     newUser["id"] = std::to_string(discordID);
-    newUser["name"] = "DiscordFunc::getCurrentUsername()";
-    newUser["actname"] = "Activity_Name";
-    newUser["actdesc"] = "Activity_Desc";
-    newUser["acttype"] = "Activity_Type";
+    newUser["name"] = DiscordFunc::getCurrentUsername();
+    newUser["actname"] = "Name";
+    newUser["actdesc"] = "Desc";
+    newUser["acttype"] = "Type";
     newUser["actimg"] = "https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-";
 
     struct curl_slist *headers = nullptr;
