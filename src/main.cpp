@@ -36,7 +36,9 @@ int main(int argc, char *argv[]) {
     if (TTF_Init() == -1)
         std::cout << "TTF_Init failed:" << TTF_GetError() << std::endl;
 
-    RenderWindow window("Discord Rich Presence Modifier", 582, 582);
+    RenderWindow window("Discord RePresence", 582, 582);
+    SDL_Surface *logoSurface = IMG_Load("res/gfx/logoWin.png");
+    SDL_SetWindowIcon(window.getWindow(), logoSurface);
 
     SDL_SetRenderDrawColor(window.getRenderer(), 32, 32, 32, 255);
 

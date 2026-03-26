@@ -15,6 +15,7 @@ LoadingScene::LoadingScene(RenderWindow *win, SDL_Texture *defTex)
             tiles.emplace_back(Vector2f(i * 64, j * 64), Vector2f(64, 64), defTex);
 
     wind = window->getWindow();
+    SDL_RaiseWindow(wind);
 }
 
 void LoadingScene::handleEvent(SDL_Event &ev, bool &running) {

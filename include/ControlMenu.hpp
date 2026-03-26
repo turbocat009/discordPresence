@@ -5,6 +5,10 @@
 #include "Player.hpp"
 #include "Button.hpp"
 #include "RenderWindow.hpp"
+extern "C"
+{
+    #include <libtray/tray.h>
+}
 
 class Control : public Entity {
     public:
@@ -15,6 +19,8 @@ class Control : public Entity {
         void destroyPopUP(SDL_Event &ev);
         void HandleEvents(SDL_Event &ev, bool &running);
         void moveWindow();
+        void closeAPP(struct tray_menu_item *item);
+        void openAPP(struct tray_menu_item *item);
 
     private:
         RenderWindow *window;

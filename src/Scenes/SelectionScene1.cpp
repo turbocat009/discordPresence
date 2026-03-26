@@ -30,6 +30,7 @@ SelectionScene1::SelectionScene1(RenderWindow *win, SDL_Texture *bgTex)
     Name = name.getText();
     Desc = desc.getText();
     Type = type.getText();
+    IMGG = getActIMG();
 
     randomVariableToMakeItWork = false;
 
@@ -94,7 +95,7 @@ void SelectionScene1::update(float dt) {
     LocalType = type.getText();
     
 
-    DiscordFunc::setPresence(Name, Desc, Type);
+    DiscordFunc::setPresence(Name, Desc, Type, IMGG);
 }
 
 

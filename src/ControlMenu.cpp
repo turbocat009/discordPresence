@@ -1,6 +1,7 @@
 #include "ControlMenu.hpp"
 #include "DiscordFunc.hpp"
 #include <SDL2/SDL.h>
+#define TRAY_ICON1 "ICON.ico"
 
 Control::Control(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, RenderWindow *win, std::string text)
     : Entity(p_pos, p_size, p_tex),
@@ -13,17 +14,44 @@ Control::Control(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, RenderWind
 {
     font = window->loadFont("res/fonts/SS3_Regular.ttf", 20);
 }
+RenderWindow *wind;
+bool trayInited = false;
+bool newRunning = true;
 
-void Control::HandleEvents(SDL_Event &ev, bool &running) {
+void closeAPP(struct tray_menu_item *item) {
+    SDL_ShowWindow(wind->getWindow());
+    SDL_RaiseWindow(wind->getWindow());
+    tray_exit();
+    newRunning = false;
+}
+
+void openAPP(struct tray_menu_item *item) {
+    SDL_ShowWindow(wind->getWindow());
+    SDL_RaiseWindow(wind->getWindow());
+    tray_exit();
+}
+
+struct tray tray = {
+    .icon_filepath = TRAY_ICON1,
+    .tooltip = "Tray",
+    .menu =
+        (struct tray_menu_item[]){
+            {.text = "Open", .cb = openAPP},
+            {.text = "Quit", .cb = closeAPP},
+            {.text = NULL}},
+};
+
+void Control::HandleEvents(SDL_Event & ev, bool &running) {
     mOSClose.handleEvent(ev);
     //mOSMinim.handleEvent(ev);
-
+    running = newRunning;
     // Check button presses and consume them immediately so they don't stay true
     if (mOSClose.isPressed()) {
         if (DiscordFunc::getToken() == "nullptr") {
             running = false;
         } else {
             SDL_HideWindow(window->getWindow());
+
         }
         mOSClose.consumePress();
     }
@@ -40,6 +68,14 @@ void Control::Update(float deltaTime) {
     SDL_GetMouseState(&mx, &my);
     mouse = {mx, my};
     moveWindow();
+    wind = window;
+    if (!trayInited) {
+        trayInited = true;
+        if (tray_init(&tray) < 0) {
+            printf("failed to create tray\n");
+            return;
+        }
+    }
 }
 
 void Control::Render(SDL_Renderer *renderer, SDL_Window *wind) {
@@ -85,7 +121,6 @@ void Control::moveWindow() {
     Uint32 mouseButtons = SDL_GetGlobalMouseState(&mouseX, &mouseY);
     bool leftDown = mouseButtons & SDL_BUTTON(SDL_BUTTON_LEFT);
 
-    // Start drag (hit-test still uses window-relative coords)
     if (!isDragging && leftDown && SDL_PointInRect(&mousePoint, &controlRect)) {
         dragOffsetX = mouseX;
         dragOffsetY = mouseY;
@@ -99,7 +134,6 @@ void Control::moveWindow() {
         isDragging = true;
     }
 
-    // Drag
     if (isDragging && leftDown) {
         SDL_SetWindowPosition(
             window->getWindow(),
@@ -107,8 +141,8 @@ void Control::moveWindow() {
             mouseY - dragOffsetY);
     }
 
-    // Stop drag
     if (!leftDown) {
         isDragging = false;
     }
 }
+

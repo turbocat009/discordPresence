@@ -92,7 +92,7 @@ void DiscordFunc::logOut() {
   token = "nullptr";
 }
 
-void DiscordFunc::setPresence(std::string &Name, std::string &Desc, std::string &Type) {
+void DiscordFunc::setPresence(std::string &Name, std::string &Desc, std::string &Type, std::string &IMG) {
   discordpp::Activity activity;
   activity.SetType(discordpp::ActivityTypes::Playing);
   activity.SetName(Name);
@@ -100,8 +100,8 @@ void DiscordFunc::setPresence(std::string &Name, std::string &Desc, std::string 
   activity.SetState(Type);
 
   discordpp::ActivityAssets assets;
-  assets.SetSmallImage("https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-");
-  assets.SetLargeImage("https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-");
+  assets.SetSmallImage(IMG);
+  assets.SetLargeImage(IMG);
   activity.SetAssets(assets);
 
   client->UpdateRichPresence(activity, [](discordpp::ClientResult result) {});

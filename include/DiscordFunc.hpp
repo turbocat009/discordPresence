@@ -10,7 +10,7 @@ class DiscordFunc {
         void initDiscordSDK();
         static void logIn(const uint64_t APPLICATION_ID, discordpp::Client *clientRef);
         static void logOut();
-        static void setPresence(std::string &Name, std::string &Desc, std::string &Type);
+        static void setPresence(std::string &Name, std::string &Desc, std::string &Type, std::string &IMG);
         static std::shared_ptr<discordpp::Client> getClient();
         static std::string getToken();
         static bool isLogIngIn;

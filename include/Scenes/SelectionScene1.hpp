@@ -41,6 +41,7 @@ private:
     std::string Name;
     std::string Desc;
     std::string Type;
+    std::string IMGG;
     bool randomVariableToMakeItWork;
     std::string LocalName;
     std::string LocalDesc;

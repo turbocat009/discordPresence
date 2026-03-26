@@ -99,7 +99,7 @@ void Input::changeButtonUIState()
     }
     if (isPressed()) {
         currentFrame.x = w * 2;
-        txtY = pos.y + size.y / 2 - 22;
+        txtY = pos.y + size.y / 2 - 18;
     }
 }
 
