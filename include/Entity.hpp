@@ -37,6 +37,7 @@ class Entity {
             SDL_RenderDrawRect(renderer, &collisionBox);
         }
         void destroy();
+        void setTexture(SDL_Texture *texture) { tex = texture; }
         virtual void render(SDL_Renderer *renderer, SDL_Window *wind);
         int w;
         int h;

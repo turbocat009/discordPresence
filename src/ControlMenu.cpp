@@ -1,7 +1,7 @@
 #include "ControlMenu.hpp"
 #include "DiscordFunc.hpp"
 #include <SDL2/SDL.h>
-#define TRAY_ICON1 "ICON.ico"
+#define TRAY_ICON1 "res/gfx/logoWin.png"
 
 Control::Control(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, RenderWindow *win, std::string text)
     : Entity(p_pos, p_size, p_tex),
@@ -50,7 +50,8 @@ void Control::HandleEvents(SDL_Event & ev, bool &running) {
         if (DiscordFunc::getToken() == "nullptr") {
             running = false;
         } else {
-            SDL_HideWindow(window->getWindow());
+            //SDL_HideWindow(window->getWindow());
+            SDL_MinimizeWindow(window->getWindow());
 
         }
         mOSClose.consumePress();

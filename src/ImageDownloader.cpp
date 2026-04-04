@@ -2,6 +2,9 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
+#include <filesystem>
+#include <cstdlib>
+#include <ctime>
 
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
@@ -126,7 +129,7 @@ std::string modifyUser(const std::string &url, const long discordID, std::string
     user["actname"] = actName;
     user["actdesc"] = actDesc;
     user["acttype"] = actType;
-    user["actimg"] = "https://play-lh.googleusercontent.com/dZe4tU5HW3zWFT01e65bDYYljvBxEvITmZC2CU-eHM1ts5ASGFyLTGgpz3-W9c2o0tE-";
+    user["actimg"] = IMG;
 
     struct curl_slist *headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -154,6 +157,32 @@ std::string modifyUser(const std::string &url, const long discordID, std::string
     curl_global_cleanup();
 
     return "0";
+}
+
+void getIMG() {
+    CURL *curl = curl_easy_init();
+    if (!curl)
+        throw std::runtime_error("curl_easy_init failed");
+
+    std::string connectionURL = IMG + "?t=" + std::to_string(std::time(nullptr));
+
+    std::filesystem::path temp = std::filesystem::temp_directory_path();
+    std::string filename = temp.string() + "image.png";
+
+    FILE *fp = fopen(filename.c_str(), "wb");
+    curl_easy_setopt(curl, CURLOPT_URL, connectionURL.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0);
+
+    CURLcode res = curl_easy_perform(curl);
+
+    curl_easy_cleanup(curl);
+    fclose(fp);
+
+    if (res != CURLE_OK)
+        throw std::runtime_error(curl_easy_strerror(res));
+
+    return;
 }
 
 std::string setIMG(const std::string &url, const long discordID, const std::string &imgLoc) {
@@ -204,6 +233,8 @@ std::string setIMG(const std::string &url, const long discordID, const std::stri
     curl_mime_free(form);
     curl_easy_cleanup(curl);
 
+    IMG = imgURL;
+
     return imgURL;
 }
 
@@ -224,5 +255,5 @@ std::string getID() {
 }
 
 std::string getActIMG() {
-    return IMG;
+    return IMG + "?t=" + std::to_string(std::time(nullptr));
 }

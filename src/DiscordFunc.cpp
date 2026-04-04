@@ -86,6 +86,7 @@ void DiscordFunc::logIn(uint64_t APPLICATION_ID, discordpp::Client *clientRef) {
 }
 
 void DiscordFunc::logOut() {
+  client->ClearRichPresence();
   client->Disconnect();
   client->UpdateToken(discordpp::AuthorizationTokenType::Bearer, "", [](discordpp::ClientResult result) {});
   isLogIngIn = false;
@@ -100,7 +101,6 @@ void DiscordFunc::setPresence(std::string &Name, std::string &Desc, std::string 
   activity.SetState(Type);
 
   discordpp::ActivityAssets assets;
-  assets.SetSmallImage(IMG);
   assets.SetLargeImage(IMG);
   activity.SetAssets(assets);
 

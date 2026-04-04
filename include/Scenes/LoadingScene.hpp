@@ -19,4 +19,5 @@ class LoadingScene : public Scene {
         std::vector<Entity> tiles;
         bool continue_ = false;
         bool fuck = true;
+        TTF_Font *textFont;
 };

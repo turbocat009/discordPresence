@@ -3,10 +3,12 @@
 #include "RenderWindow.hpp"
 #include "Button.hpp"
 #include "InputText.hpp"
+#include "Entity.hpp"
 
 
 #include <string>
-
+#include <iostream>
+#include <filesystem>
 
 class SelectionScene1 : public Scene
 {
@@ -20,6 +22,8 @@ public:
     SDL_Texture *bg;
 private:
     RenderWindow *window;
+    std::filesystem::path temp;
+    SDL_Texture *Round;
     SDL_Texture *whiteBackground;
     SDL_Texture *btnTex;
     bool start_ = false;
@@ -30,10 +34,13 @@ private:
     SDL_Texture *logOutBtnTex;
     SDL_Texture *smallTxt;
     SDL_Texture *bigTxt;
+    SDL_Texture *imggg;
+    SDL_Texture *imgHover;
     std::vector<Entity> entities;
     bool logedOut_ = false;
     Button applyBtn;
     Button logOutBtn;
+    Button setButton;
     Input name;
     Input desc;
     Input type;
@@ -46,4 +53,6 @@ private:
     std::string LocalName;
     std::string LocalDesc;
     std::string LocalType;
+    Entity Image;
+    Entity Rounded;
 };

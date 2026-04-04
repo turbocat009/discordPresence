@@ -3,3 +3,4 @@
 /bin/release/
 /lib
 .DS_Store
+res/.DS_Store

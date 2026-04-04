@@ -12,7 +12,6 @@ class Button : public Entity {
         void setFont(TTF_Font *f) { m_font = f; }
         TTF_Font *getFont() const { return m_font; }
         bool isHovered();
-        void setTexture(SDL_Texture *texture) { tex = texture; }
         bool isPressed();
         void consumePress() { pressed = false; }  // Reset pressed state after consuming it
         void changeButtonUIState();

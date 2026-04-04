@@ -18,7 +18,7 @@ RenderWindow::RenderWindow(const char *p_title, int p_w, int p_h)
     if (window == nullptr)
         std::cout << "Window failed to init. Error: " << SDL_GetError() << std::endl;
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 
     SDL_GetWindowSize(window, &winW, &winH);
     SDL_GetRendererOutputSize(renderer, &drawW, &drawH);
@@ -34,6 +34,8 @@ RenderWindow::RenderWindow(const char *p_title, int p_w, int p_h)
 SDL_Texture* RenderWindow::loadTexture(const char* p_filePath) {
     SDL_Texture* texture = NULL;
     texture = IMG_LoadTexture(renderer, p_filePath);
+
+    std::cout << p_filePath << std::endl;
 
     if (texture == NULL)
         std::cout << "Failed to load texture. Error: " << SDL_GetError() << std::endl;

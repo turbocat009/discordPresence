@@ -16,6 +16,8 @@ LoadingScene::LoadingScene(RenderWindow *win, SDL_Texture *defTex)
 
     wind = window->getWindow();
     SDL_RaiseWindow(wind);
+
+    textFont = window->loadFont("res/fonts/SS3_Bold.ttf", 36);
 }
 
 void LoadingScene::handleEvent(SDL_Event &ev, bool &running) {
@@ -33,6 +35,7 @@ void LoadingScene::update(float deltaTime) {
         std::cout << "Started Getting JSON" << std::endl;
         std::cout << getJson("https://discord-represence-backend.vercel.app/", DiscordFunc::getCurrentID()) << std::endl;
         std::cout << "Ended Getting JSON" << std::endl;
+        getIMG();
         continue_ = true;
     }
 }
@@ -40,6 +43,7 @@ void LoadingScene::update(float deltaTime) {
 void LoadingScene::render() {
     window->clear();
 
-    for (Entity &e : tiles)
-        window->render(e, Vector2f(64, 64));
+    /*for (Entity &e : tiles)
+        window->render(e, Vector2f(64, 64));*/
+    window->renderText(textFont, "Loading...", {255, 255, 255, 255}, (window->getWidth() / 2) - 85, (window->getHeight() / 2) - 50);
 }

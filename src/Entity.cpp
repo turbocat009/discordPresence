@@ -53,7 +53,6 @@ bool Entity::collidesWith(const Entity &other) {
 }
 
 void Entity::render(SDL_Renderer *renderer, SDL_Window *wind) {
-
     SDL_Rect srce;
     srce.x = currentFrame.x;
     srce.y = currentFrame.y;
