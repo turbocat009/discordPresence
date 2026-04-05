@@ -13,6 +13,7 @@ In this document the steps the project will take are writen.
  - Add Notifications
  - Add Updates
  - Save Login for next time
+ - Create Makefile
 
 **Beta 3 (fixing things):**
  - Fix bugs
@@ -23,6 +24,7 @@ In this document the steps the project will take are writen.
 **Release 1.0:**
  - Update to SDL3
  - Optimize
+ - Optimize and compile Images
  - Last things (Logos, Web, Final Compilations,... )
 
 After Release 1.0, the APP may be updated with bug fixes, and suggested features. There may be more important updates. This map can be changed if suggested
