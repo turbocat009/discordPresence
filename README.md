@@ -12,18 +12,15 @@ An application to be able to modify your Discord Rich Presence live.
   - Discord Social SDK
   - libcurl
   - libtray
-- Get the source & build it:
-```bash
-git clone https://github.com/turbocat009/discordPresence.git 
-cd discordPresence
-make (to do)
-```
+- Get the source & build it
 
+## Things to know
+- The app is in its first beta stage
+- It may crash
+- It is still on development
+- If you need help with something contact me on discord ( https://discord.com/users/710508236050137180 )
 
-## Installing:
-## 
-
-- **Status:** Alpha 0.1v
+- **Status:** Beta 1.0
 
 ## License
 Discord is a registered trademark and property of Discord Inc. This project is not affiliated with or endorsed by Discord.
