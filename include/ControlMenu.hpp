@@ -19,15 +19,13 @@ class Control : public Entity {
         void destroyPopUP(SDL_Event &ev);
         void HandleEvents(SDL_Event &ev, bool &running);
         void moveWindow();
-        void closeAPP(struct tray_menu_item *item);
-        void openAPP(struct tray_menu_item *item);
 
     private:
         RenderWindow *window;
         SDL_Texture *macOSCloseTex;
-        //SDL_Texture *macOSMinimTex;
+        SDL_Texture *macOSMinimTex;
         Button mOSClose;
-        //Button mOSMinim;
+        Button mOSMinim;
         TTF_Font *font;
         std::string p_text;
         SDL_Point mouse;

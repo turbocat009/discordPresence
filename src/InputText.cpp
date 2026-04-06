@@ -25,8 +25,7 @@ void Input::Update(float deltaTime) {
     changeButtonUIState();
 }
 
-void Input::Render(SDL_Renderer *renderer)
-{
+void Input::Render(SDL_Renderer *renderer) {
 
     Entity::render(renderer, wind);
 
@@ -40,8 +39,7 @@ void Input::Render(SDL_Renderer *renderer)
     window->renderText(m_font, text, {0, 0, 0, 255}, txtX, txtY);
 }
 
-void Input::handleEvent(SDL_Event &ev)
-{
+void Input::handleEvent(SDL_Event &ev) {
     //Detect click
     if (ev.type == SDL_MOUSEBUTTONDOWN &&
         ev.button.button == SDL_BUTTON_LEFT &&
@@ -62,8 +60,7 @@ void Input::handleEvent(SDL_Event &ev)
     }
 }
 
-void Input::checkCollisions(Player &player)
-{
+void Input::checkCollisions(Player &player) {
     if (this->collidesWith(player)) {
         std::cout << "Collision detected between Button and Player!" << std::endl;
         this->destroy();
@@ -80,13 +77,11 @@ bool Input::isHovered() {
     return SDL_PointInRect(&mouse, &buttonRect);
 }
 
-bool Input::isPressed()
-{
+bool Input::isPressed() {
     return pressed;
 }
 
-void Input::changeButtonUIState()
-{
+void Input::changeButtonUIState() {
     currentFrame.x = 0;
     txtY = pos.y + size.y / 2 - 26;
 
@@ -115,6 +110,13 @@ void Input::write(SDL_Event &ev) {
             else if (ev.key.keysym.sym == SDLK_RETURN) {
                 pressed = false;
             }
+        }
+    } else if (ev.type == SDL_KEYDOWN) {
+        if (ev.key.keysym.sym == SDLK_BACKSPACE) {
+            text.pop_back();
+        }
+        else if (ev.key.keysym.sym == SDLK_RETURN) {
+            pressed = false;
         }
     }
 }

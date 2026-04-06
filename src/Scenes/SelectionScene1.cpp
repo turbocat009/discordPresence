@@ -11,6 +11,7 @@
 #include <vector>
 #include <tinyfd/tinyfiledialogs.h>
 
+
 SelectionScene1::SelectionScene1(RenderWindow *win, SDL_Texture *bgTex)
     : bg(bgTex),
       window(win),
@@ -40,12 +41,14 @@ SelectionScene1::SelectionScene1(RenderWindow *win, SDL_Texture *bgTex)
     Type = type.getText();
     IMGG = getActIMG();
 
-    DiscordFunc::setPresence(Name, Desc, Type, IMGG);
-
+    
     randomVariableToMakeItWork = false;
-
+    
     textFont = window->loadFont("res/fonts/SS3_Bold.ttf", 20);
-
+    
+    shit = true;
+    
+    DiscordFunc::setPresence(Name, Desc, Type, IMGG);
 }
 
 void SelectionScene1::handleEvent(SDL_Event &ev, bool &running) {
@@ -65,11 +68,13 @@ void SelectionScene1::handleEvent(SDL_Event &ev, bool &running) {
         modifyUser("https://discord-represence-backend.vercel.app/", DiscordFunc::getCurrentID(), Name, Desc, Type);
         DiscordFunc::setPresence(Name, Desc, Type, IMGG);
     }
-    if(setButton.isPressed()) {
+    if(setButton.isPressed() && shit) {
+        shit = false;
+        const char *home = getenv("HOME");
         const char *filters[] = {"*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif"};
         const char *file = tinyfd_openFileDialog(
             "Select an image",
-            NULL,             
+            home,             
             5,                
             filters,        
             "Image files",  
@@ -77,14 +82,15 @@ void SelectionScene1::handleEvent(SDL_Event &ev, bool &running) {
         );
         if (file) {
             std::cout << "Selected file: " << file << std::endl;
-            modifyImg(file);
-            setIMG("https://discord-represence-backend.vercel.app/", DiscordFunc::getCurrentID(), "outFile.jpg");
+            setIMG("https://discord-represence-backend.vercel.app/", DiscordFunc::getCurrentID(), modifyImg(file));
             DiscordFunc::setPresence(Name, Desc, Type, IMGG);
+            shit = true;
         }
         else {
             std::cout << "No file selected." << std::endl;
+            shit = true;
         }
-        getIMG();
+        getIMG(getActIMG());
         IMGG = getActIMG();
         Image.setTexture(window->loadTexture((temp.string() + "image.png").c_str()));
     }
@@ -141,6 +147,8 @@ void SelectionScene1::update(float dt) {
     LocalName = name.getText();
     LocalDesc = desc.getText();
     LocalType = type.getText();
+
+
 
 }
 

@@ -53,7 +53,7 @@ std::string getJson(const std::string &url, const long discordID) {
         throw std::runtime_error(curl_easy_strerror(res));
 
     if (response == "null") {
-        return createUser(url, discordID);
+        response = createUser(url, discordID);
     }
 
 
@@ -82,7 +82,7 @@ std::string createUser(const std::string &url, const long discordID) {
     newUser["actname"] = "Name";
     newUser["actdesc"] = "Desc";
     newUser["acttype"] = "Type";
-    newUser["actimg"] = setIMG(url, discordID, "res/gfx/logoo.png");
+    newUser["actimg"] = setIMG(url, discordID, getIMG("https://raw.githubusercontent.com/turbocat009/discordPresence/refs/heads/main/res/gfx/logooo.png"));
 
     struct curl_slist *headers = nullptr;
     headers = curl_slist_append(headers, "Content-Type: application/json");
@@ -159,12 +159,12 @@ std::string modifyUser(const std::string &url, const long discordID, std::string
     return "0";
 }
 
-void getIMG() {
+std::string getIMG(const std::string IMGURL) {
     CURL *curl = curl_easy_init();
     if (!curl)
         throw std::runtime_error("curl_easy_init failed");
 
-    std::string connectionURL = IMG + "?t=" + std::to_string(std::time(nullptr));
+    std::string connectionURL = IMGURL + "?t=" + std::to_string(std::time(nullptr));
 
     std::filesystem::path temp = std::filesystem::temp_directory_path();
     std::string filename = temp.string() + "image.png";
@@ -182,7 +182,7 @@ void getIMG() {
     if (res != CURLE_OK)
         throw std::runtime_error(curl_easy_strerror(res));
 
-    return;
+    return filename;
 }
 
 std::string setIMG(const std::string &url, const long discordID, const std::string &imgLoc) {
@@ -234,6 +234,8 @@ std::string setIMG(const std::string &url, const long discordID, const std::stri
     curl_easy_cleanup(curl);
 
     IMG = imgURL;
+
+    std::cout << imgURL << std::endl;
 
     return imgURL;
 }

@@ -55,4 +55,5 @@ private:
     std::string LocalType;
     Entity Image;
     Entity Rounded;
+    bool shit;
 };

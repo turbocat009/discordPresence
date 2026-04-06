@@ -40,11 +40,13 @@ void Button::handleEvent(SDL_Event &ev) {
     //Detect click
     if (ev.type == SDL_MOUSEBUTTONDOWN &&
         ev.button.button == SDL_BUTTON_LEFT &&
-        isHovered())
-        pressed = true;
+        isHovered() && !pressed) {
+            pressed = true;
+        }
     else if (ev.type == SDL_MOUSEBUTTONUP &&
-        ev.button.button == SDL_BUTTON_LEFT)
-        pressed = false;
+        ev.button.button == SDL_BUTTON_LEFT && pressed) {
+            pressed = false;
+        }
     
 }
 

@@ -10,7 +10,7 @@ struct MemoryBuffer {
 };
 
 std::string getJson(const std::string &url, const long discordID);
-void getIMG();
+std::string getIMG(const std::string IMGURL);
 
 std::string createUser(const std::string &url, const long discordID);
 std::string modifyUser(const std::string &url, const long discordID, std::string &actName, std::string &actDesc, std::string &actType);

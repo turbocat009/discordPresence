@@ -122,6 +122,7 @@ int main(int argc, char *argv[]) {
 
         window.display();
     }
+    DiscordFunc::logOut();
     delete scene;
 
     window.cleanUp();

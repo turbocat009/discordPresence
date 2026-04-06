@@ -35,7 +35,7 @@ void LoadingScene::update(float deltaTime) {
         std::cout << "Started Getting JSON" << std::endl;
         std::cout << getJson("https://discord-represence-backend.vercel.app/", DiscordFunc::getCurrentID()) << std::endl;
         std::cout << "Ended Getting JSON" << std::endl;
-        getIMG();
+        getIMG(getActIMG());
         continue_ = true;
     }
 }
