@@ -26,7 +26,7 @@ static size_t writeStringCallback(void *contents, size_t size, size_t nmemb, voi
     return realSize;
 }
 
-std::string getJson(const std::string &url, const long discordID) {
+std::string getJson(const std::string &url, const long long discordID) {
     CURL *curl = curl_easy_init();
     if (!curl)
         throw std::runtime_error("curl_easy_init failed");
@@ -39,6 +39,7 @@ std::string getJson(const std::string &url, const long discordID) {
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeStringCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0);
+    curl_easy_setopt(curl, CURLOPT_CAINFO, "certs/cacert.pem");
 
     struct curl_slist *headers = nullptr;
     headers = curl_slist_append(headers, "Accept: application/json");
@@ -69,7 +70,7 @@ std::string getJson(const std::string &url, const long discordID) {
     return response;
 }
 
-std::string createUser(const std::string &url, const long discordID) {
+std::string createUser(const std::string &url, const long long discordID) {
     CURL *curl = curl_easy_init();
     if (!curl)
         throw std::runtime_error("curl_easy_init failed");
@@ -98,6 +99,7 @@ std::string createUser(const std::string &url, const long discordID) {
     curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.size());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeStringCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+    curl_easy_setopt(curl, CURLOPT_CAINFO, "certs/cacert.pem");
 
     CURLcode res = curl_easy_perform(curl);
 
@@ -116,7 +118,7 @@ std::string createUser(const std::string &url, const long discordID) {
     return response;
 }
 
-std::string modifyUser(const std::string &url, const long discordID, std::string &actName, std::string &actDesc, std::string &actType)
+std::string modifyUser(const std::string &url, const long long discordID, std::string &actName, std::string &actDesc, std::string &actType)
 {
     CURL *curl = curl_easy_init();
     if (!curl)
@@ -141,6 +143,7 @@ std::string modifyUser(const std::string &url, const long discordID, std::string
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
     curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.size());
+    curl_easy_setopt(curl, CURLOPT_CAINFO, "certs/cacert.pem");
 
     CURLcode res = curl_easy_perform(curl);
 
@@ -173,6 +176,7 @@ std::string getIMG(const std::string IMGURL) {
     curl_easy_setopt(curl, CURLOPT_URL, connectionURL.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0);
+    curl_easy_setopt(curl, CURLOPT_CAINFO, "certs/cacert.pem");
 
     CURLcode res = curl_easy_perform(curl);
 
@@ -185,7 +189,7 @@ std::string getIMG(const std::string IMGURL) {
     return filename;
 }
 
-std::string setIMG(const std::string &url, const long discordID, const std::string &imgLoc) {
+std::string setIMG(const std::string &url, const long long discordID, const std::string &imgLoc) {
     CURL *curl = curl_easy_init();
     if (!curl)
         throw std::runtime_error("curl_easy_init failed");
@@ -210,6 +214,7 @@ std::string setIMG(const std::string &url, const long discordID, const std::stri
     curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeStringCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+    curl_easy_setopt(curl, CURLOPT_CAINFO, "certs/cacert.pem");
 
     CURLcode res = curl_easy_perform(curl);
 

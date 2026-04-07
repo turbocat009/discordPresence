@@ -120,7 +120,7 @@ std::string DiscordFunc::getCurrentUsername() {
   return user.Username();
 }
 
-long DiscordFunc::getCurrentID() {
+long long DiscordFunc::getCurrentID() {
   auto user = client->GetCurrentUser();
   return user.Id();
 }

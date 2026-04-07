@@ -15,7 +15,7 @@ class DiscordFunc {
         static std::string getToken();
         static bool isLogIngIn;
         static std::string getCurrentUsername();
-        static long getCurrentID();
+        static long long getCurrentID();
     private:
         static std::shared_ptr<discordpp::Client> client;
         static std::string token;
