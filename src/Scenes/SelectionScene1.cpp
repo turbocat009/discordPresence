@@ -147,9 +147,6 @@ void SelectionScene1::update(float dt) {
     LocalName = name.getText();
     LocalDesc = desc.getText();
     LocalType = type.getText();
-
-
-
 }
 
 

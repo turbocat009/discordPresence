@@ -3,6 +3,8 @@
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 #include "Button.hpp"
+#include "PopUp.hpp"
+#include <vector>
 
 class MenuScene : public Scene {
     public:
@@ -17,6 +19,7 @@ class MenuScene : public Scene {
         const uint64_t ID;
         SDL_Texture *menuImg;
         SDL_Texture *btnTex;
+        SDL_Texture *popTex;
         SDL_Texture *btnTexHovered;
         SDL_Texture *popUpTex;
         Entity Menu;
@@ -24,4 +27,5 @@ class MenuScene : public Scene {
         SDL_Color color;
         bool start_ = false;
         void buttonHovered();
+        std::vector<PopUp> popups;
 };

@@ -10,6 +10,7 @@ Button::Button(Vector2f p_pos, Vector2f p_size, SDL_Texture *p_tex, std::string 
 
     w = w/4;
     pressed = false;
+    clicked = false;
 
     TTF_SizeText(m_font, text.c_str(), &textWidth, nullptr);
     txtX = pos.x + size.x / 2 - textWidth / 2;
@@ -27,13 +28,23 @@ void Button::Update(float deltaTime) {
 
 void Button::Render(SDL_Renderer *renderer) {
 
+    // apply parent alpha to button texture
+    if (tex) {
+        SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
+        SDL_SetTextureAlphaMod(tex, static_cast<Uint8>(parentAlpha * 255));
+    }
+
     Entity::render(renderer, wind);
 
     if (!m_font)
         std::cerr << "Font not loaded!" << std::endl;
 
-    
-    window->renderText(m_font, text, {255, 255, 255, 255}, txtX, txtY);
+    SDL_Color col = {255, 255, 255, static_cast<Uint8>(parentAlpha * 255)};
+    window->renderText(m_font, text, col, txtX, txtY);
+
+    if (tex) {
+        SDL_SetTextureAlphaMod(tex, 255);
+    }
 }
 
 void Button::handleEvent(SDL_Event &ev) {
@@ -45,9 +56,22 @@ void Button::handleEvent(SDL_Event &ev) {
         }
     else if (ev.type == SDL_MOUSEBUTTONUP &&
         ev.button.button == SDL_BUTTON_LEFT && pressed) {
+            // register click only if mouse is still over the button on release
+            if (isHovered()) {
+                clicked = true;
+                if (onClick) onClick();
+            }
             pressed = false;
         }
     
+}
+
+bool Button::pollClicked() {
+    if (clicked) {
+        clicked = false;
+        return true;
+    }
+    return false;
 }
 
 void Button::checkCollisions(Player &player) {

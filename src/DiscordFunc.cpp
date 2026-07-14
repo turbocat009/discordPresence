@@ -6,33 +6,45 @@
 #include <csignal>
 
 #include "DiscordFunc.hpp"
+#include "ErrorNotifier.hpp"
 
 std::shared_ptr<discordpp::Client> DiscordFunc::client = nullptr;
 std::string DiscordFunc::token = "nullptr";
 bool DiscordFunc::isLogIngIn = false;
+std::function<void(std::string)> DiscordFunc::authErrorCallback = nullptr;
+int DiscordFunc::WhichErrorNow = 0;
 
 void DiscordFunc::initDiscordSDK() {
   std::cout << "Initializing Discord SDK...\n";
+  
+  WhichErrorNow = 0;
 
   //Create Discord Client
   client = std::make_shared<discordpp::Client>();
+  
+  if (!client) {
+    WhichErrorNow = 1;
+    return;
+  }
 
-  // Set up logging callback
-  client->AddLogCallback([](auto message, auto severity) { 
-    std::cout << "[" << EnumToString(severity) << "] " << message << std::endl; 
-  }, discordpp::LoggingSeverity::Info);
-
-  // Set up status callback to monitor client connection
   client->SetStatusChangedCallback([](discordpp::Client::Status status, discordpp::Client::Error error, int32_t errorDetail) {
       std::cout << "Status changed: " << discordpp::Client::StatusToString(status) << std::endl;
 
       if (status == discordpp::Client::Status::Ready) {
         std::cout << "Client is ready! You can now call SDK functions.\n";
       } else if (error != discordpp::Client::Error::None) {
-        std::cerr << "Connection Error: " << discordpp::Client::ErrorToString(error) << " - Details: " << errorDetail << std::endl;
-      } 
+        std::string err = std::string("Connection Error: ") + discordpp::Client::ErrorToString(error) + " - Details: " + std::to_string(errorDetail);
+        std::cerr << err << std::endl;
+        WhichErrorNow = 1;
+        ErrorNotifier::notify(err, "Discord Connection Error");
+      }
     }
   );
+
+  // Set up logging callback
+  client->AddLogCallback([](auto message, auto severity) { 
+    std::cout << "[" << EnumToString(severity) << "] " << message << std::endl; 
+  }, discordpp::LoggingSeverity::Info);
 }
 
 void DiscordFunc::logIn(uint64_t APPLICATION_ID, discordpp::Client *clientRef) {
@@ -52,7 +64,19 @@ void DiscordFunc::logIn(uint64_t APPLICATION_ID, discordpp::Client *clientRef) {
     // Begin authentication process
     clientRef->Authorize(args, [clientRef, codeVerifier, APPLICATION_ID](discordpp::ClientResult result, std::string code, std::string redirectUri) {
     if (!result.Successful()) {
-      std::cerr << "Authentication Error: " << result.Error() << std::endl;
+      std::string errorMsg = result.Error();
+      std::cerr << "Authentication Error: " << errorMsg << std::endl;
+      isLogIngIn = false;
+      ErrorNotifier::notify(std::string("Authentication Error: ") + errorMsg, "Login Error");
+      if (errorMsg == "User cancelled authorization" || 
+        errorMsg.find("The resource owner or authorization server denied the request") != std::string::npos) {
+        WhichErrorNow = 2;
+      }
+
+      if (authErrorCallback) {
+        authErrorCallback(errorMsg);
+      }
+
       return;
     } else {
       std::cout << "Authorization successful! Getting access token...\n";
@@ -66,7 +90,6 @@ void DiscordFunc::logIn(uint64_t APPLICATION_ID, discordpp::Client *clientRef) {
         int32_t expiresIn,
         std::string scope) {
           std::cout << "Access token received! Establishing connection...\n";
-          // Next Step: Update the token and connect
           clientRef->UpdateToken(discordpp::AuthorizationTokenType::Bearer, accessToken, [accessToken](discordpp::ClientResult result) {
             if(result.Successful()) {
               std::cout << "Token updated, connecting to Discord...\n";
@@ -123,4 +146,8 @@ std::string DiscordFunc::getCurrentUsername() {
 long long DiscordFunc::getCurrentID() {
   auto user = client->GetCurrentUser();
   return user.Id();
+}
+
+void DiscordFunc::setAuthErrorCallback(std::function<void(std::string)> callback) {
+  authErrorCallback = callback;
 }

@@ -11,6 +11,7 @@
 #include <ImageDownloader.hpp>
 #include "DiscordFunc.hpp"
 #include <stdexcept>
+#include "ErrorNotifier.hpp"
 
 std::string activity_Name;
 std::string activity_Description;
@@ -104,7 +105,9 @@ std::string createUser(const std::string &url, const long long discordID) {
     CURLcode res = curl_easy_perform(curl);
 
     if (res != CURLE_OK) {
-        std::cerr << "curl error: " << curl_easy_strerror(res) << "\n";
+        std::string err = std::string("curl error: ") + curl_easy_strerror(res);
+        std::cerr << err << "\n";
+        ErrorNotifier::notify(err, "Network Error");
         curl_slist_free_all(headers);
         curl_easy_cleanup(curl);
         curl_global_cleanup();
@@ -148,7 +151,9 @@ std::string modifyUser(const std::string &url, const long long discordID, std::s
     CURLcode res = curl_easy_perform(curl);
 
     if (res != CURLE_OK) {
-        std::cerr << "curl error: " << curl_easy_strerror(res) << "\n";
+        std::string err = std::string("curl error: ") + curl_easy_strerror(res);
+        std::cerr << err << "\n";
+        ErrorNotifier::notify(err, "Network Error");
         curl_slist_free_all(headers);
         curl_easy_cleanup(curl);
         curl_global_cleanup();
@@ -219,7 +224,9 @@ std::string setIMG(const std::string &url, const long long discordID, const std:
     CURLcode res = curl_easy_perform(curl);
 
     if (res != CURLE_OK) {
-        std::cerr << "curl error: " << curl_easy_strerror(res) << "\n";
+        std::string err = std::string("curl error: ") + curl_easy_strerror(res);
+        std::cerr << err << "\n";
+        ErrorNotifier::notify(err, "Network Error");
         curl_mime_free(form);
         curl_easy_cleanup(curl);
         return "Curl Failed";

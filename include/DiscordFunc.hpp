@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <functional>
 
 #include "discordpp.h"
 #include "Math.hpp"
@@ -15,9 +16,18 @@ class DiscordFunc {
         static std::string getToken();
         static bool isLogIngIn;
         static std::string getCurrentUsername();
+<<<<<<< HEAD
         static long long getCurrentID();
+=======
+        static long getCurrentID();
+        static int WhichErrorNow;
+        static bool hasConnectionError() { return WhichErrorNow == 1; }
+>>>>>>> e86b16e (Implemented PopUP)
     private:
         static std::shared_ptr<discordpp::Client> client;
         static std::string token;
+        static std::function<void(std::string)> authErrorCallback;
     protected:
+    public:
+        static void setAuthErrorCallback(std::function<void(std::string)> callback);
 };

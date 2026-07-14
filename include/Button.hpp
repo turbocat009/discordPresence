@@ -2,6 +2,7 @@
 #include "Entity.hpp"
 #include "Player.hpp"
 #include "RenderWindow.hpp"
+#include <functional>
 
 class Button : public Entity {
     public:
@@ -13,9 +14,13 @@ class Button : public Entity {
         TTF_Font *getFont() const { return m_font; }
         bool isHovered();
         bool isPressed();
-        void consumePress() { pressed = false; }  // Reset pressed state after consuming it
+        void consumePress() { pressed = false; } 
+        bool pollClicked(); 
+        void setOnClick(std::function<void()> fn) { onClick = fn; }
+        bool hasOnClick() const { return (bool)onClick; }
         void changeButtonUIState();
         void handleEvent(SDL_Event &ev);
+        void setParentAlpha(float a) { parentAlpha = a; }
     private : 
         SDL_Window *wind;
         RenderWindow *window;
@@ -29,4 +34,7 @@ class Button : public Entity {
         int txtX;
         int txtY;
         int textWidth;
+        bool clicked;
+        std::function<void()> onClick;
+        float parentAlpha = 1.0f;
 };
